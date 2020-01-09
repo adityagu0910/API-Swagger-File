@@ -1,0 +1,87 @@
+swagger: "2.0"
+info:
+  description: "Basic Encryption/Decryption Service"
+  version: "1.0.0"
+  title: "DP HSM Crypto Service"
+  contact:
+    email: "test@test.com"
+host: "testhosts.com"
+basePath: "/api/vault/v1"
+schemes:
+- "https"
+paths:
+  /crypto/encrypt:
+    post:
+      tags:
+      - "encrypt"
+      summary: "Encrypt Base 64 Message"
+      description: ""
+      operationId: "encrypt"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Encryption request message."
+        required: true
+        schema:
+          $ref: "#/definitions/plaintext-payload"
+      responses:
+        200:
+          description: Decrypted message.
+          schema:
+            $ref: '#/definitions/encrypted-payload'
+        405:
+          description: "Invalid input"
+          
+  /crypto/decrypt:
+    post:
+      tags:
+      - "decrypt"
+      summary: "Decrypt Base 64 Message"
+      description: ""
+      operationId: "decrypt"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Decryption request message."
+        required: true
+        schema:
+          $ref: "#/definitions/encrypted-payload"
+      responses:
+        200:
+          description: Decrypted message.
+          schema:
+            $ref: '#/definitions/plaintext-payload'
+        405:
+          description: "Invalid input"
+
+definitions:
+  plaintext-payload:
+    type: "object"
+    required:
+    - "application"
+    - "plaintextB64"
+    properties:
+      application:
+        type: "string"
+      plaintextB64:
+        type: string
+        format: byte
+  encrypted-payload:
+    type: "object"
+    required:
+    - "application"
+    - "encryptedB64"
+    properties:
+      application:
+        type: "string"
+      encryptedB64:
+        type: string
+        format: byte
